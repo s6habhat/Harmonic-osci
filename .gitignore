@@ -5,5 +5,4 @@
 *.snm
 *.synctex.gz
 *.toc
-presentations/*
-presentation/Folien.pdf
+Report/report.pdf
