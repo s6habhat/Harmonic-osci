@@ -1,0 +1,5 @@
+- reproduce harmonic oscillator
+- anharmonic oscillator (tunneling behaviour)
+- classical limit: hbar -> 0
+- higher energy levels than 1 and 2
+- 2D, 3D cases
