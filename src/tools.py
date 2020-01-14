@@ -10,6 +10,11 @@ def distanceToParameter(distance):
 	# calculate lambda parameter from distance
 	return -1/2 * (distance / 2)**-2
 
+def bootstrap(num, values):
+	# bootstrap function
+	means = [np.mean(np.random.choice(values, size = len(values) // 2) / (len(values) // 2)) for n in range(num)]
+	return np.std(means)
+
 STATE_INIT, STATE_LEFT, STATE_RIGHT = None, 1, 2
 
 class TransitionCounter:
@@ -80,8 +85,13 @@ if __name__ == '__main__':
 	values = [random.random()-0.5 for _ in range(10)]
 	for v in values:
 		tC.registerValue(v)
-	#print(tC.getTransitions(), values)
+	print(tC.getTransitions(), values)
 
 	# Test Case getMinima, distanceToParameter
 	for d in range(1, 17):
-		print(distanceToParameter(d), 2 * getMinima(1, distanceToParameter(d)))
+		print(distanceToParameter(d), 2 * getMinima(distanceToParameter(d)))
+
+	# Test Case bootstrap:
+	#values = np.random.normal(loc=0, scale=1, size=100)
+	#bootstrap_values = bootstrap(10000, values)
+	#print(bootstrap_values)
