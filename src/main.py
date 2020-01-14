@@ -2,11 +2,31 @@ import random
 import numpy as np
 from matplotlib import pyplot as plt
 
-mass = 1
-lambda_ = 0
+N = 1000
 
-def Hamiltonian(x):
-	return 0.5 * mass * x ** 2 + lambda_ * x ** 4
+# Harmonic oscillator
+#mass = 1
+#mu = 10
+#lambda_ = 0
+#initval = 0
+
+# Anharmonic oscillator
+mass = 0.01
+mu = -10
+lambda_ = -0.02
+initval = -5
+
+tau = 0.1
+
+# mimina at +/- sqrt(-a/(2b))
+print(np.sqrt(-mu/(2*mu * lambda_)))
+
+def Potential(x):
+	return mu * (x ** 2 + lambda_ * x ** 4)
+
+def Action(x_new, x_old):
+	#print(tau * (mass * (x_new - x_old) ** 2 / (2 * tau ** 2)), Potential(x_old), x_old)
+	return tau * (mass * (x_new - x_old) ** 2 / (2 * tau ** 2) + Potential(x_new))
 
 class Metropolis:
 	def __init__(self, stop, func, borders = [-5, 5], initval=0):
@@ -19,27 +39,33 @@ class Metropolis:
 	def __iter__(self):
 		num = 0
 		while num < self.stop:
-			newValue = random.uniform(*self.borders)
-			newEnergy = self.func(newValue)
-			deltaEnergy = newEnergy - self.energy
-			if deltaEnergy < 0:
-				self.value = newValue
-				self.energy = newEnergy
-			else:
-				if np.exp(-deltaEnergy) > random.random():
+			changed = False
+			while not changed:
+				newValue = random.uniform(*self.borders)
+				newEnergy = self.func(newValue, self.value)
+				deltaEnergy = newEnergy - self.energy
+				if deltaEnergy < 0:
 					self.value = newValue
 					self.energy = newEnergy
+					changed = True
+				else:
+					if np.exp(-deltaEnergy) > random.random():
+						self.value = newValue
+						self.energy = newEnergy
+						changed = True
 			yield self.value
 			num += 1
 
 	def __len__(self):
 		return self.stop
 
-N = 1000
 
-m = Metropolis(N, Hamiltonian)
+
+m = Metropolis(N, Action, borders = [-10, 10], initval=initval)
 
 plt.plot()
-plt.scatter(list(m), range(N))
+plt.errorbar(list(m), range(N))
 plt.xlim(*m.borders)
+#xs = np.array(range(-40000, 40000)) / 1000
+#plt.scatter(xs, Potential(xs))
 plt.show()
