@@ -2,9 +2,13 @@ import random
 import numpy as np
 from matplotlib import pyplot as plt
 
-def getMinima(mu, lambda_):
+def getMinima(lambda_):
 	# mimina at +/- sqrt(-a/(2b))
-	return np.sqrt(-mu/(2*mu * lambda_))
+	return np.sqrt(-1 / (2 * lambda_))
+
+def distanceToParameter(distance):
+	# calculate lambda parameter from distance
+	return -1/2 * (distance / 2)**-2
 
 STATE_INIT, STATE_LEFT, STATE_RIGHT = None, 1, 2
 
@@ -76,4 +80,8 @@ if __name__ == '__main__':
 	values = [random.random()-0.5 for _ in range(10)]
 	for v in values:
 		tC.registerValue(v)
-	print(tC.getTransitions(), values)
+	#print(tC.getTransitions(), values)
+
+	# Test Case getMinima, distanceToParameter
+	for d in range(1, 17):
+		print(distanceToParameter(d), 2 * getMinima(1, distanceToParameter(d)))
