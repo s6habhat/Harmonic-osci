@@ -2,11 +2,11 @@ import random
 import numpy as np
 from matplotlib import pyplot as plt
 
-m = 1
+mass = 1
 lambda_ = 0
 
 def Hamiltonian(x):
-	return 0.5 * m * x ** 2 + lambda_ * x ** 4
+	return 0.5 * mass * x ** 2 + lambda_ * x ** 4
 
 class Metropolis:
 	def __init__(self, stop, func, borders = [-5, 5], initval=0):
