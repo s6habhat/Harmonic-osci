@@ -2,36 +2,23 @@ import random
 import numpy as np
 from matplotlib import pyplot as plt
 
-N = 1000
-
-# Harmonic oscillator
-#mass = 1
-#mu = 10
-#lambda_ = 0
-#initval = 0
-
-# Anharmonic oscillator
-mass = 0.01
-mu = -10
-lambda_ = -0.02
-initval = -5
-
-tau = 0.1
-
 # mimina at +/- sqrt(-a/(2b))
 print(np.sqrt(-mu/(2*mu * lambda_)))
 
 def Potential(mu, lambda_):
+	# Potential function with parameters
 	def wrapper(x, mu=mu, lambda_=lambda_):
 		return mu * (x ** 2 + lambda_ * x ** 4)
 	return wrapper
 
 def Action(tau, mass, potential):
+	# Action function with parameters
 	def wrapper(x_new, x_old, tau=tau, mass=mass, potential=potential):
 		return tau * (mass * (x_new - x_old) ** 2 / (2 * tau ** 2) + potential(x_new))
 	return wrapper
 
 class Metropolis:
+	# Metropolis algorithm
 	def __init__(self, stop, func, borders = [-5, 5], initval=0):
 		self.stop = stop
 		self.func = func
@@ -40,6 +27,7 @@ class Metropolis:
 		self.energy = 1000
 
 	def __iter__(self):
+		# calculate steps
 		num = 0
 		while num < self.stop:
 			changed = False
@@ -61,16 +49,3 @@ class Metropolis:
 
 	def __len__(self):
 		return self.stop
-
-p = Potential(mu, lambda_)
-
-a = Action(tau, mass, p)
-
-m = Metropolis(N, a, borders = [-10, 10], initval=initval)
-
-plt.plot()
-plt.errorbar(list(m), range(N))
-plt.xlim(*m.borders)
-#xs = np.array(range(-40000, 40000)) / 1000
-#plt.scatter(xs, Potential(xs))
-plt.show()
