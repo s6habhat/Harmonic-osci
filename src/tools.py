@@ -1,6 +1,4 @@
-import random
 import numpy as np
-from matplotlib import pyplot as plt
 
 def getMinima(lambda_):
 	# mimina at +/- sqrt(-a/(2b))
@@ -60,7 +58,7 @@ class Metropolis:
 		while num < self.stop:
 			changed = False
 			while not changed:
-				newValue = random.uniform(*self.borders)
+				newValue = np.random.uniform(*self.borders)
 				newEnergy = self.func(newValue, self.value)
 				deltaEnergy = newEnergy - self.energy
 				if deltaEnergy < 0:
@@ -68,7 +66,7 @@ class Metropolis:
 					self.energy = newEnergy
 					changed = True
 				else:
-					if np.exp(-deltaEnergy) > random.random():
+					if np.exp(-deltaEnergy) > np.random.rand():
 						self.value = newValue
 						self.energy = newEnergy
 						changed = True
@@ -82,7 +80,7 @@ class Metropolis:
 if __name__ == '__main__':
 	# Test Case TransitionCounter
 	tC = TransitionCounter()
-	values = [random.random()-0.5 for _ in range(10)]
+	values = np.random.uniform(-1, 1, 10)
 	for v in values:
 		tC.registerValue(v)
 	print(tC.getTransitions(), values)
