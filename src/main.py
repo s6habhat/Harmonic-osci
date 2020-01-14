@@ -21,11 +21,15 @@ tau = 0.1
 # mimina at +/- sqrt(-a/(2b))
 print(np.sqrt(-mu/(2*mu * lambda_)))
 
-def Potential(x):
-	return mu * (x ** 2 + lambda_ * x ** 4)
+def Potential(mu, lambda_):
+	def wrapper(x, mu=mu, lambda_=lambda_):
+		return mu * (x ** 2 + lambda_ * x ** 4)
+	return wrapper
 
-def Action(x_new, x_old):
-	return tau * (mass * (x_new - x_old) ** 2 / (2 * tau ** 2) + Potential(x_new))
+def Action(tau, mass, potential):
+	def wrapper(x_new, x_old, tau=tau, mass=mass, potential=potential):
+		return tau * (mass * (x_new - x_old) ** 2 / (2 * tau ** 2) + potential(x_new))
+	return wrapper
 
 class Metropolis:
 	def __init__(self, stop, func, borders = [-5, 5], initval=0):
@@ -58,9 +62,11 @@ class Metropolis:
 	def __len__(self):
 		return self.stop
 
+p = Potential(mu, lambda_)
 
+a = Action(tau, mass, p)
 
-m = Metropolis(N, Action, borders = [-10, 10], initval=initval)
+m = Metropolis(N, a, borders = [-10, 10], initval=initval)
 
 plt.plot()
 plt.errorbar(list(m), range(N))
