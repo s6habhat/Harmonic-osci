@@ -6,3 +6,4 @@
 *.synctex.gz
 *.toc
 Report/report.pdf
+*/__pycache__/*
