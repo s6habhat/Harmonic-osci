@@ -2,8 +2,9 @@ import random
 import numpy as np
 from matplotlib import pyplot as plt
 
-# mimina at +/- sqrt(-a/(2b))
-print(np.sqrt(-mu/(2*mu * lambda_)))
+def getMinima(mu, lambda_):
+	# mimina at +/- sqrt(-a/(2b))
+	return np.sqrt(-mu/(2*mu * lambda_))
 
 def Potential(mu, lambda_):
 	# Potential function with parameters
