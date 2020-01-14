@@ -25,7 +25,6 @@ def Potential(x):
 	return mu * (x ** 2 + lambda_ * x ** 4)
 
 def Action(x_new, x_old):
-	#print(tau * (mass * (x_new - x_old) ** 2 / (2 * tau ** 2)), Potential(x_old), x_old)
 	return tau * (mass * (x_new - x_old) ** 2 / (2 * tau ** 2) + Potential(x_new))
 
 class Metropolis:
