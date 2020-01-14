@@ -7,7 +7,6 @@ import numpy as np
 N = 1000
 
 # number of distances evaluated
-n = 100
 min_distance = 0.1
 max_distance = 16
 step_distance = 0.1
