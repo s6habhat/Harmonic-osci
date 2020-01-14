@@ -6,6 +6,24 @@ def getMinima(mu, lambda_):
 	# mimina at +/- sqrt(-a/(2b))
 	return np.sqrt(-mu/(2*mu * lambda_))
 
+STATE_INIT, STATE_LEFT, STATE_RIGHT = None, 1, 2
+
+class TransitionCounter:
+	def __init__(self):
+		self.transitions = -1
+		self.lastState = STATE_INIT
+
+	def registerValue(self, value):
+		state = STATE_LEFT
+		if value > 0:
+			state = STATE_RIGHT
+		if state != self.lastState:
+			self.lastState = state
+			self.transitions += 1
+
+	def getTransitions(self):
+		return self.transitions
+
 def Potential(mu, lambda_):
 	# Potential function with parameters
 	def wrapper(x, mu=mu, lambda_=lambda_):
@@ -50,3 +68,12 @@ class Metropolis:
 
 	def __len__(self):
 		return self.stop
+
+
+if __name__ == '__main__':
+	# Test Case TransitionCounter
+	tC = TransitionCounter()
+	values = [random.random()-0.5 for _ in range(10)]
+	for v in values:
+		tC.registerValue(v)
+	print(tC.getTransitions(), values)
