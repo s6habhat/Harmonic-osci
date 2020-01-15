@@ -18,10 +18,14 @@ a = Action(tau, mass, p)
 
 m = Metropolis(N, a, borders = [-10, 10], initval=initval)
 
+vals = list(m)
+
 plt.plot()
-plt.errorbar(list(m), range(N))
+plt.errorbar(vals, range(N))
 plt.xlim(*m.borders)
 plt.show()
 
-#xs = np.array(range(-40000, 40000)) / 1000
-#plt.scatter(xs, Potential(xs))
+plt.figure()
+plt.hist(vals, bins = 40)
+plt.xlim(*m.borders)
+plt.show()
