@@ -65,11 +65,10 @@ class Metropolis:
 					self.value = newValue
 					self.energy = newEnergy
 					changed = True
-				else:
-					if np.exp(-deltaEnergy) > np.random.rand():
-						self.value = newValue
-						self.energy = newEnergy
-						changed = True
+				elif np.exp(-deltaEnergy) > np.random.rand():
+					self.value = newValue
+					self.energy = newEnergy
+					changed = True
 			yield self.value
 			num += 1
 
