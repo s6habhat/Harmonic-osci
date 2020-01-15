@@ -7,3 +7,4 @@
 *.toc
 Report/report.pdf
 */__pycache__/*
+*.pyc
