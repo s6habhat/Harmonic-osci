@@ -9,7 +9,6 @@ N = 100000
 mass = 0.01
 mu = -10
 lambda_ = -0.02
-initval = -5
 
 step = 0.1
 
@@ -19,7 +18,7 @@ p = Potential(mu, lambda_)
 
 a = Action(tau, mass, p)
 
-m = Metropolis(N, a, borders = [-10, 10], initval=initval)
+m = Metropolis(N, a, borders = [-10, 10])
 
 vals = list(m)
 

@@ -23,11 +23,9 @@ def calculateTunnelingRate(distance):
     #print('Calculating transition rate for distance %0.2f' %distance)
     # calculate potential parameter
     lambda_ = distanceToParameter(distance)
-    # start at one Minimum
-    initval = distance / 2
     p = Potential(mu, lambda_)
     a = Action(tau, mass, p)
-    m = Metropolis(N, a, borders = [-10, 10], initval=initval)
+    m = Metropolis(N, a, borders = [-10, 10])
 
     tC = TransitionCounter()
 
