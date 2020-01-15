@@ -26,4 +26,5 @@ for mu, lambda_, name, d in params:
     plt.xlabel('Distance')
     plt.ylabel('Tunneling rate')
     plt.savefig('imgs/d_%s.png' %name)
+    plt.savefig('imgs/d_%s.pdf' %name)
     plt.close()
