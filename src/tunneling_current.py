@@ -1,7 +1,8 @@
-from tools import Potential, Action, Metropolis, distanceToParameter, TransitionCounter
+from tools import Potential, Action, Metropolis, distanceToParameter, TransitionCounter, getRootDirectory
 from matplotlib import pyplot as plt
 from multiprocessing import Pool
 import numpy as np
+import csv
 
 # number of lattice positions
 N = 1000
@@ -21,7 +22,7 @@ hbar = 1
 tunneling_rate = []
 
 def calculateTunnelingRate(distance):
-    #print('Calculating transition rate for distance %0.2f' %distance)
+    print('Calculating transition rate for distance %0.2f' %distance)
     # calculate potential parameter
     lambda_ = distanceToParameter(distance)
     p = Potential(mu, lambda_)
@@ -38,8 +39,14 @@ distances = np.arange(min_distance, max_distance, step_distance)
 p = Pool()
 tunneling_rate = p.map(calculateTunnelingRate, distances)
 
-plt.plot()
-plt.errorbar(distances, tunneling_rate)
-plt.xlabel('Distance')
-plt.ylabel('Tunneling rate')
-plt.show()
+root_path = getRootDirectory()
+dir_ = root_path / 'data' / 'tunneling_current'
+dir_.mkdir(exist_ok=True)
+
+file_ = dir_ / ('d%0.2f-%0.2f-%0.2f-N%d.csv' % (min_distance, max_distance, step_distance, N))
+
+with file_.open('w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(['distance', 'tunneling_rate'])
+    for i, t_rate in enumerate(tunneling_rate):
+        writer.writerow([distances[i], t_rate])
