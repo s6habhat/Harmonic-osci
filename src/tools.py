@@ -50,7 +50,7 @@ class Metropolis:
 		self.func = func
 		self.borders = borders
 		self.value = np.random.uniform(*self.borders)
-		self.energy = self.func(self.value, self.value)
+		self.action = self.func(self.value, self.value)
 
 	def __iter__(self):
 		# calculate steps
@@ -59,15 +59,15 @@ class Metropolis:
 			changed = False
 			while not changed:
 				newValue = np.random.uniform(*self.borders)
-				newEnergy = self.func(newValue, self.value)
-				deltaEnergy = newEnergy - self.energy
+				newAction = self.func(newValue, self.value)
+				deltaEnergy = newAction - self.action
 				if deltaEnergy < 0:
 					self.value = newValue
-					self.energy = newEnergy
+					self.action = newAction
 					changed = True
 				elif np.exp(-deltaEnergy) > np.random.rand():
 					self.value = newValue
-					self.energy = newEnergy
+					self.action = newAction
 					changed = True
 			yield self.value
 			num += 1
