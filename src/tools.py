@@ -1,4 +1,10 @@
 import numpy as np
+from pathlib import Path
+import os
+
+
+def getRootDirectory():
+	return Path(os.path.dirname(os.path.realpath(__file__))).parent
 
 def getMinima(lambda_):
 	# mimina at +/- sqrt(-a/(2b))
