@@ -1,5 +1,6 @@
-from tools import Potential, Action, Metropolis
+from tools import Potential, Action, Metropolis, getRootDirectory, distanceToParameter
 from matplotlib import pyplot as plt
+import csv
 
 # number of lattice positions
 N = 1000
@@ -7,7 +8,8 @@ N = 1000
 # parameters
 mass = 0.01
 mu = -10
-lambda_ = -0.02
+distance = 10
+lambda_ = distanceToParameter(distance)
 
 tau = 0.1
 hbar = 1
@@ -20,7 +22,19 @@ m = Metropolis(N, a, borders = [-10, 10], hbar=hbar, tau=tau)
 
 vals = list(m)
 
-plt.plot()
+root_path = getRootDirectory()
+dir_ = root_path / 'data' / 'anharmonic_oscillator_track'
+dir_.mkdir(exist_ok=True)
+
+file_ = dir_ / ('l%0.4fd%0.4fN%d.csv' % (lambda_, distance, N))
+
+with file_.open('w', newline='') as file:
+    writer = csv.writer(file)
+    writer.writerow(['num', 'position'])
+    for i, position in enumerate(vals):
+        writer.writerow([i+1, position])
+
+"""plt.plot()
 plt.errorbar(vals, range(N))
 plt.xlim(*m.borders)
 plt.show()
@@ -28,4 +42,4 @@ plt.show()
 plt.figure()
 plt.hist(vals, bins = 40)
 plt.xlim(*m.borders)
-plt.show()
+plt.show()"""
