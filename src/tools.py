@@ -60,8 +60,8 @@ class Metropolis:
 			while not changed:
 				newValue = np.random.uniform(*self.borders)
 				newAction = self.func(newValue, self.value)
-				deltaEnergy = newAction - self.action
-				if deltaEnergy < 0 or np.exp(-deltaEnergy) > np.random.rand():
+				deltaAction = newAction - self.action
+				if deltaAction < 0 or np.exp(-deltaAction) > np.random.rand():
 					self.value = newValue
 					self.action = newAction
 					changed = True
