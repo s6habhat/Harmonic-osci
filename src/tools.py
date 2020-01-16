@@ -40,15 +40,17 @@ def Potential(mu, lambda_):
 def Action(tau, mass, potential):
 	# Action function with parameters
 	def wrapper(x_new, x_old, tau=tau, mass=mass, potential=potential):
-		return tau * (mass * (x_new - x_old) ** 2 / (2 * tau ** 2) + potential(x_new))
+		return (mass * (x_new - x_old) ** 2 / (2 * tau ** 2) + potential(x_new))
 	return wrapper
 
 class Metropolis:
 	# Metropolis algorithm
-	def __init__(self, stop, func, borders = [-5, 5]):
+	def __init__(self, stop, func, borders = [-5, 5], hbar=1, tau=0.1):
 		self.stop = stop
 		self.func = func
 		self.borders = borders
+		self.hbar = hbar
+		self.tau = tau
 		self.value = np.random.uniform(*self.borders)
 		self.action = self.func(self.value, self.value)
 
@@ -61,7 +63,7 @@ class Metropolis:
 				newValue = np.random.uniform(*self.borders)
 				newAction = self.func(newValue, self.value)
 				deltaAction = newAction - self.action
-				if deltaAction < 0 or np.exp(-deltaAction) > np.random.rand():
+				if deltaAction < 0 or np.exp(-self.tau * deltaAction / self.hbar) > np.random.rand():
 					self.value = newValue
 					self.action = newAction
 					changed = True

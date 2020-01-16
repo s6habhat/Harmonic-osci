@@ -16,6 +16,7 @@ mass = 0.01
 mu = -10
 
 tau = 0.1
+hbar = 1
 
 tunneling_rate = []
 
@@ -25,7 +26,7 @@ def calculateTunnelingRate(distance):
     lambda_ = distanceToParameter(distance)
     p = Potential(mu, lambda_)
     a = Action(tau, mass, p)
-    m = Metropolis(N, a, borders = [-10, 10])
+    m = Metropolis(N, a, borders = [-10, 10], hbar=hbar, tau=tau)
 
     tC = TransitionCounter()
 

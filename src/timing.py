@@ -10,10 +10,11 @@ mu = 10
 lambda_ = 0
 
 tau = 0.1
+hbar = 1
 
 p = Potential(mu, lambda_)
 a = Action(tau, mass, p)
-m = Metropolis(N, a, borders = [-10, 10])
+m = Metropolis(N, a, borders = [-10, 10], hbar=hbar, tau=tau)
 
 
 N = 100
