@@ -33,13 +33,3 @@ with file_.open('w', newline='') as file:
     writer.writerow(['num', 'position'])
     for i, position in enumerate(vals):
         writer.writerow([i+1, position])
-
-"""plt.plot()
-plt.errorbar(vals, range(N))
-plt.xlim(*m.borders)
-plt.show()
-
-plt.figure()
-plt.hist(vals, bins = 40)
-plt.xlim(*m.borders)
-plt.show()"""
