@@ -45,13 +45,16 @@ def Action(tau, mass, potential):
 
 class Metropolis:
 	# Metropolis algorithm
-	def __init__(self, stop, func, borders = [-5, 5], hbar=1, tau=0.1):
+	def __init__(self, stop, func, borders = [-5, 5], hbar=1, tau=0.1, initval=None):
 		self.stop = stop
 		self.func = func
 		self.borders = borders
 		self.hbar = hbar
 		self.tau = tau
-		self.value = np.random.uniform(*self.borders)
+		if initval == None:
+			self.value = np.random.uniform(*self.borders)
+		else:
+			self.value = initval
 		self.action = self.func(self.value, self.value)
 
 	def __iter__(self):
