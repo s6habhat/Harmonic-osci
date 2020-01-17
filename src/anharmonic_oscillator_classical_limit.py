@@ -20,16 +20,16 @@ tau = 0.1
 hbar_start, hbar_stop, hbar_step = 0.01, 2.0, 0.01
 
 hbars = np.arange(hbar_start, hbar_stop + hbar_step, hbar_step)
-bins = np.arange(start, stop, step=step)
+bins = np.arange(start, stop + step, step=step)
 
 def calculatePositionDistribution(hbar):
-    print("calculating for hbar=%0.2f" % hbar)
-    p = Potential(mu, lambda_)
-    a = Action(tau, mass, p)
-    m = Metropolis(N, a, borders = [-10, 10], hbar=hbar, tau=tau, initval=-5)
+	print("calculating for hbar=%0.2f" % hbar)
+	p = Potential(mu, lambda_)
+	a = Action(tau, mass, p)
+	m = Metropolis(N, a, borders = [-10, 10], hbar=hbar, tau=tau, initval=-5)
 
-    vals = list(m)
-    return list(np.bincount(np.digitize(vals, bins), minlength=len(bins))[:len(bins)])
+	vals = list(m)
+	return list(np.histogram(vals, bins)[0])
 
 p = Pool()
 results = p.map(calculatePositionDistribution, hbars)
@@ -41,8 +41,8 @@ dir_.mkdir(exist_ok=True)
 file_ = dir_ / ('h%0.2f-%0.2f-%0.2f_%0.2f-%0.2f-%0.2f-N%d.csv' % (hbar_start, hbar_stop, hbar_step, start, stop, step, N))
 
 with file_.open('w', newline='') as file:
-    writer = csv.writer(file)
-    writer.writerow(['hbar'] + list(bins[:-1]))
-    writer.writerow(['hbar'] + list(bins[1:]))
-    for i, hbar in enumerate(hbars):
-        writer.writerow([hbar] + results[i])
+	writer = csv.writer(file)
+	writer.writerow(['hbar'] + list(bins[:-1]))
+	writer.writerow(['hbar'] + list(bins[1:]))
+	for i, hbar in enumerate(hbars):
+		writer.writerow([hbar] + results[i])

@@ -6,7 +6,7 @@ from pathlib import Path
 import csv
 
 # number of lattice positions
-N = 10000
+N = 1000
 
 # parameters
 mass = 0.01
@@ -21,17 +21,18 @@ tau = 0.1
 hbar = 1
 
 distances = np.arange(min_distance, max_distance, step_distance)
-bins = np.arange(start, stop, step=step)
+bins = np.arange(start, stop + step, step=step)
+print(bins)
 
 def calculatePositionDistribution(distance):
-    print("calculating for distance=%0.2f" % distance)
-    lambda_ = distanceToParameter(distance)
-    p = Potential(mu, lambda_)
-    a = Action(tau, mass, p)
-    m = Metropolis(N, a, borders = [start, stop], hbar=hbar, tau=tau, initval=-distance)
+	print("calculating for distance=%0.2f" % distance)
+	lambda_ = distanceToParameter(distance)
+	p = Potential(mu, lambda_)
+	a = Action(tau, mass, p)
+	m = Metropolis(N, a, borders = [start, stop], hbar=hbar, tau=tau, initval=-distance)
 
-    vals = list(m)
-    return list(np.bincount(np.digitize(vals, bins), minlength=len(bins))[:len(bins)])
+	vals = list(m)
+	return list(np.histogram(vals, bins)[0])
 
 p = Pool()
 results = p.map(calculatePositionDistribution, distances)
@@ -43,8 +44,8 @@ dir_.mkdir(exist_ok=True)
 file_ = dir_ / ('d%0.2f-%0.2f-%0.2fs%0.2f-%0.2f-%0.2f-N%d.csv' % (min_distance, max_distance, step_distance, start, stop, step, N))
 
 with file_.open('w', newline='') as file:
-    writer = csv.writer(file)
-    writer.writerow(['distance'] + list(bins[:-1]))
-    writer.writerow(['distance'] + list(bins[1:]))
-    for i, distance in enumerate(distances):
-        writer.writerow([distance] + results[i])
+	writer = csv.writer(file)
+	writer.writerow(['distance'] + list(bins[:-1]))
+	writer.writerow(['distance'] + list(bins[1:]))
+	for i, distance in enumerate(distances):
+		writer.writerow([distance] + results[i])

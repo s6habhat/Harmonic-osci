@@ -17,10 +17,10 @@ start, stop, step = -10, 10, 0.1
 
 tau = 0.1
 
-hbar_start, hbar_stop, hbar_step = 0.01, 2.0, 0.01
+hbar_start, hbar_stop, hbar_step = 0.01, 2.0, 0.1
 
 hbars = np.arange(hbar_start, hbar_stop + hbar_step, hbar_step)
-bins = np.arange(start, stop, step=step)
+bins = np.arange(start, stop + step, step=step)
 
 def calculatePositionDistribution(hbar):
     print("calculating for hbar=%0.2f" % hbar)
@@ -29,7 +29,7 @@ def calculatePositionDistribution(hbar):
     m = Metropolis(N, a, borders = [-10, 10], hbar=hbar, tau=tau, initval=0)
 
     vals = list(m)
-    return list(np.bincount(np.digitize(vals, bins), minlength=len(bins))[:len(bins)])
+    return list(np.histogram(vals, bins)[0])
 
 p = Pool()
 results = p.map(calculatePositionDistribution, hbars)
