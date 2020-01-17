@@ -49,6 +49,20 @@ def Action(tau, mass, potential):
 		return (mass * (x_new - x_old) ** 2 / (2 * tau ** 2) + potential(x_new))
 	return wrapper
 
+
+def Potential3D(mu, lambda_):
+	# Potential function with parameters
+	def wrapper(x, mu=mu, lambda_=lambda_):
+		r2 = x[0] ** 2 + x[1] ** 2
+		return mu * (r2 + lambda_ * r2 ** 2)
+	return wrapper
+
+def Action3D(tau, mass, potential):
+	# Action function with parameters
+	def wrapper(x_new, x_old, tau=tau, mass=mass, potential=potential):
+		return (mass * ((x_new[0] - x_old[0]) ** 2 + (x_new[1] - x_old[1]) ** 2) / (2 * tau ** 2) + potential(x_new))
+	return wrapper
+
 class Metropolis:
 	# Metropolis algorithm
 	def __init__(self, stop, func, borders = [-5, 5], hbar=1, tau=0.1, initval=None):
