@@ -14,10 +14,9 @@ def distanceToParameter(distance):
 	# calculate lambda parameter from distance
 	return -1/2 * (distance / 2)**-2
 
-def bootstrap(num, values):
+def bootstrap(num, values, func=np.mean):
 	# bootstrap function
-	means = [np.mean(np.random.choice(values, size = len(values) // 2) / (len(values) // 2)) for n in range(num)]
-	return np.std(means)
+	return [func(np.random.choice(values, size = len(values))) for n in range(num)]
 
 STATE_INIT, STATE_LEFT, STATE_RIGHT = None, 1, 2
 
