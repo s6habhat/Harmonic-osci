@@ -8,3 +8,4 @@
 Report/report.pdf
 */__pycache__/*
 *.pyc
+**/test*.py
