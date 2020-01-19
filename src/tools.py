@@ -18,6 +18,9 @@ def bootstrap(num, values, func=np.mean):
 	# bootstrap function
 	return [func(np.random.choice(values, size = len(values))) for n in range(num)]
 
+def meanSquare(values):
+	return np.mean(values * values)
+
 STATE_INIT, STATE_LEFT, STATE_RIGHT = None, 1, 2
 
 class TransitionCounter:
