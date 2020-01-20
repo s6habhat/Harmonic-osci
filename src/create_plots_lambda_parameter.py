@@ -15,8 +15,9 @@ for subdir in dirs:
 	filename = root_path / subdir
 	relative_path = filename.relative_to(root_path / 'data')
 
-	if not filename.exists():
+	if not filename.exists() or filename.is_dir():
 		continue
+
 	with filename.open('r') as csvfile:
 		reader = csv.reader(csvfile)
 		distances = []

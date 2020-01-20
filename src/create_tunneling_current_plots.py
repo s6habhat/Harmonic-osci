@@ -14,8 +14,8 @@ for subdir in dirs:
     filename = root_path / subdir
     relative_path = filename.relative_to(root_path / 'data')
 
-    if not filename.exists():
-        continue
+    if not filename.exists() or filename.is_dir():
+		continue
 
     distances = []
     tunneling_rates = []
