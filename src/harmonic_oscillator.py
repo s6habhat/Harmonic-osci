@@ -29,7 +29,7 @@ dir_.mkdir(exist_ok=True)
 file_ = dir_ / ('l%0.4fd%0.4fN%d.csv' % (lambda_, distance, N))
 
 with file_.open('w', newline='') as file:
-    writer = csv.writer(file)
-    writer.writerow(['num', 'position'])
-    for i, position in enumerate(vals):
-        writer.writerow([i+1, position])
+	writer = csv.writer(file)
+	writer.writerow(['num', 'position'])
+	for i, position in enumerate(vals):
+		writer.writerow([i+1, position])
