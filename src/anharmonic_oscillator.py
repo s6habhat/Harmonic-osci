@@ -18,7 +18,7 @@ p = Potential(mu, lambda_)
 
 a = Action(tau, mass, p)
 
-m = Metropolis(N, a, borders = [-10, 10], hbar=hbar, tau=tau)
+m = Metropolis(N, a, borders = [-10, 10], hbar=hbar, tau=tau, initval=-distance / 2)
 
 vals = list(m)
 
