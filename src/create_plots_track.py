@@ -36,7 +36,7 @@ for subdir_pattern in dirs:
 
 		plt.figure()
 		plt.errorbar(distances, nums)
-		plt.xlabel('Distance')
+		plt.xlabel('Position')
 		plt.ylabel('Number')
 
 		out_filename = root_path / 'imgs' / relative_path
