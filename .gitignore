@@ -9,3 +9,11 @@ Report/report.pdf
 */__pycache__/*
 *.pyc
 **/test*.py
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.synctex.gz
+*.toc
+presentation/slides.pdf
