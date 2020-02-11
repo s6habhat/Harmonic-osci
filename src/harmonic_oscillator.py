@@ -1,9 +1,9 @@
-from tools import Potential, Action, Metropolis, getRootDirectory, distanceToParameter
-from matplotlib import pyplot as plt
+from tools import Potential, Action, Metropolis, getRootDirectory
+
 import csv
 
 # number of lattice positions
-N = 200
+N = 2000
 
 # parameters
 mass = 0.01
