@@ -5,7 +5,7 @@ import numpy as np
 import csv
 
 # number of lattice positions
-N = 1000
+N = 10000
 
 # number of distances evaluated
 min_distance = 0.1
