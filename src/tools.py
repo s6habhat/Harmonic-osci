@@ -52,14 +52,14 @@ def Action(tau, mass, potential):
 	return wrapper
 
 
-def Potential3D(mu, lambda_):
+def Potential2D(mu, lambda_):
 	# Potential function with parameters
 	def wrapper(x, mu=mu, lambda_=lambda_):
 		r2 = x[0] ** 2 + x[1] ** 2
 		return mu * (r2 + lambda_ * r2 ** 2)
 	return wrapper
 
-def Action3D(tau, mass, potential):
+def Action2D(tau, mass, potential):
 	# Action function with parameters
 	def wrapper(x_new, x_old, tau=tau, mass=mass, potential=potential):
 		return (mass * ((x_new[0] - x_old[0]) ** 2 + (x_new[1] - x_old[1]) ** 2) / (2 * tau ** 2) + potential(x_new))
