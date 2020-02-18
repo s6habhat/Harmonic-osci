@@ -3,7 +3,7 @@ import numpy as np
 import csv
 import argparse
 
-parser = argparse.ArgumentParser(description='Process some integers.')
+parser = argparse.ArgumentParser(description='Create samples for the harmonic oscillator')
 parser.add_argument("-i", "--iterations", type=int, default=100,
                     help="Number of Metropolis iterations")
 parser.add_argument("-N", "--number", type=int, default=100,
