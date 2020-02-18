@@ -16,6 +16,8 @@ parser.add_argument("-t", "--tau", type=float, default=0.1,
                     help="Time step size")
 parser.add_argument("-hb", "--hbar", type=float, default=1,
                     help="Value of the reduces Plancks constant")
+parser.add_argument("-init", "--initial", type=float, default=0,
+                    help="Initial values for the path")
 args = parser.parse_args()
 
 
@@ -26,6 +28,7 @@ mass = args.mass
 mu = args.mu
 tau = args.tau
 hbar = args.hbar
+initial = args.initial
 
 p = Potential(mu, 0)	# harmonic potential -> no x^4 contribution
 
@@ -34,13 +37,13 @@ k = Kinetic(mass, tau)
 e = Energy(k, p)
 de = deltaEnergy(k, p)
 
-m = Metropolis(e, de, init=1, valWidth=1, hbar=hbar, tau=tau, N=N)
+m = Metropolis(e, de, init=initial, valWidth=1, hbar=hbar, tau=tau, N=N)
 
 root_path = getRootDirectory()
 dir_ = root_path / 'data' / 'harmonic_oscillator_track'
 dir_.mkdir(exist_ok=True)
 
-file_ = dir_ / ('N%di%d.csv' % (N, iterations))
+file_ = dir_ / ('N%di%dinit%0.4f.csv' % (N, iterations, initial))
 
 accept_ratios = []
 with file_.open('w', newline='') as file:
