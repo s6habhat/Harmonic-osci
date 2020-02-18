@@ -65,16 +65,29 @@ def Action2D(tau, mass, potential):
 		return (mass * ((x_new[0] - x_old[0]) ** 2 + (x_new[1] - x_old[1]) ** 2) / (2 * tau ** 2) + potential(x_new))
 	return wrapper
 
+def randomNumberGenerator(dimensions, min_, max_):
+	if dimensions == 1:
+		def wrapper(min_=min_, max_=max_):
+			return np.random.uniform(min_, max_)
+		return wrapper
+
+	else:
+		def wrapper(dimensions=dimensions, min_=min_, max_=max_):
+			return (np.random.uniform(min_, max_) for i in range(dimensions))
+		return wrapper
+
+
 class Metropolis:
 	# Metropolis algorithm
-	def __init__(self, stop, func, borders = [-5, 5], hbar=1, tau=0.1, initval=None):
+	def __init__(self, stop, func, dimensions=1, borders = [-5, 5], hbar=1, tau=0.1, initval=None):
 		self.stop = stop
 		self.func = func
 		self.borders = borders
 		self.hbar = hbar
 		self.tau = tau
+		self.randomNumberGenerator = randomNumberGenerator(dimensions, *borders)
 		if initval == None:
-			self.value = np.random.uniform(*self.borders)
+			self.value = self.randomNumberGenerator()
 		else:
 			self.value = initval
 		self.action = self.func(self.value, self.value)
@@ -85,7 +98,7 @@ class Metropolis:
 		while num < self.stop:
 			changed = False
 			while not changed:
-				newValue = np.random.uniform(*self.borders)
+				newValue = self.randomNumberGenerator()
 				newAction = self.func(newValue, self.value)
 				deltaAction = newAction - self.action
 				if deltaAction < 0 or np.exp(-self.tau * deltaAction / self.hbar) > np.random.rand():
