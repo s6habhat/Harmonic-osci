@@ -68,7 +68,7 @@ class Metropolis:
 		if init == None:
 			self.values = np.random.normal(size=N, scale=initValWidth)
 		elif type(init) in [float, int]:
-			self.values = np.full(N, init)
+			self.values = np.full(N, float(init))
 		else:
 			self.values = np.array(init)
 			N = len(self.values)
