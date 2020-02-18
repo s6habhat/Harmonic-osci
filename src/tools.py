@@ -40,77 +40,75 @@ class TransitionCounter:
 		return self.transitions
 
 def Potential(mu, lambda_):
-	# Potential function with parameters
+	# Potential Energy with parameters
 	def wrapper(x, mu=mu, lambda_=lambda_):
 		return mu * (x ** 2 + lambda_ * x ** 4)
 	return wrapper
 
-def Action(tau, mass, potential):
-	# Action function with parameters
-	def wrapper(x_new, x_old, tau=tau, mass=mass, potential=potential):
-		return (mass * (x_new - x_old) ** 2 / (2 * tau ** 2) + potential(x_new))
+def Kinetic(m, tau):
+	# Kinetic Energy with parameters
+	def wrapper(x_i, x_j, m=m, tau=tau):
+		return m / 2 * (x_i - x_j) ** 2 / tau ** 2
 	return wrapper
 
-
-def Potential2D(mu, lambda_):
-	# Potential function with parameters
-	def wrapper(x, mu=mu, lambda_=lambda_):
-		r2 = x[0] ** 2 + x[1] ** 2
-		return mu * (r2 + lambda_ * r2 ** 2)
+def Energy(kinetic, potential):
+	# Energy function with parameters
+	def wrapper(x, kinetic=kinetic, potential=potential):
+		return sum([kinetic(x[i], x[i+1]) for i in range(len(x)-1)]) + sum([potential(xx) for xx in x])
 	return wrapper
 
-def Action2D(tau, mass, potential):
-	# Action function with parameters
-	def wrapper(x_new, x_old, tau=tau, mass=mass, potential=potential):
-		return (mass * ((x_new[0] - x_old[0]) ** 2 + (x_new[1] - x_old[1]) ** 2) / (2 * tau ** 2) + potential(x_new))
+def deltaEnergy(kinetic, potential):
+	def wrapper(x, x_old, x_new, index, kinetic=kinetic, potential=potential):
+		return potential(x_new) - potential(x_old) + kinetic(x[index - 1], x_new) + kinetic(x_new, x[index + 1]) - (kinetic(x[index - 1], x_old) + kinetic(x_old, x[index + 1]))
 	return wrapper
-
-def randomNumberGenerator(dimensions, min_, max_):
-	if dimensions == 1:
-		def wrapper(min_=min_, max_=max_):
-			return np.random.uniform(min_, max_)
-		return wrapper
-
-	else:
-		def wrapper(dimensions=dimensions, min_=min_, max_=max_):
-			return (np.random.uniform(min_, max_) for i in range(dimensions))
-		return wrapper
-
 
 class Metropolis:
 	# Metropolis algorithm
-	def __init__(self, stop, func, dimensions=1, borders = [-5, 5], hbar=1, tau=0.1, initval=None):
-		self.stop = stop
-		self.func = func
-		self.borders = borders
+	def __init__(self, energy, deltaEnergy, init=None, initValWidth=1, valWidth=1, periodic=True, N=100, hbar=1, tau=0.1):
+		if init == None:
+			self.values = np.random.normal(size=N, scale=initValWidth)
+		elif type(init) in [float, int]:
+			self.values = np.full(N, init)
+		else:
+			self.values = np.array(init)
+			N = len(self.values)
+		if periodic:
+			self.values[-1] = self.values[0]
+
+		self.energy = energy
+		self.deltaEnergy = deltaEnergy
+		self.valWidth = valWidth
+		self.periodic = periodic
+		self.N = N
 		self.hbar = hbar
 		self.tau = tau
-		self.randomNumberGenerator = randomNumberGenerator(dimensions, *borders)
-		if initval == None:
-			self.value = self.randomNumberGenerator()
-		else:
-			self.value = initval
-		self.action = self.func(self.value, self.value)
+
+	def __next__(self):
+		energy = self.energy(self.values)
+		start = 1
+		stop = self.N - 1
+		accepted = 0
+		for i in range(start, stop):
+			newvalue = np.random.normal(self.valWidth)
+			deltaEnergy = self.deltaEnergy(self.values, self.values[i], newvalue, i)
+			if deltaEnergy < 0:
+				self.values[i] = newvalue
+				energy = energy + deltaEnergy
+				accepted += 1
+				# accept it
+
+			else:
+				if np.exp(- self.tau * deltaEnergy / self.hbar) > np.random.rand():
+					self.values[i] = newvalue
+					energy = energy + deltaEnergy
+					accepted += 1
+					# accept it
+
+				# reject
+		return self.values, accepted / (stop / start)
 
 	def __iter__(self):
-		# calculate steps
-		num = 0
-		while num < self.stop:
-			changed = False
-			while not changed:
-				newValue = self.randomNumberGenerator()
-				newAction = self.func(newValue, self.value)
-				deltaAction = newAction - self.action
-				if deltaAction < 0 or np.exp(-self.tau * deltaAction / self.hbar) > np.random.rand():
-					self.value = newValue
-					self.action = newAction
-					changed = True
-			yield self.value
-			num += 1
-
-	def __len__(self):
-		return self.stop
-
+		return self
 
 if __name__ == '__main__':
 	# Test Case TransitionCounter
