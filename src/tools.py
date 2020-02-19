@@ -64,7 +64,7 @@ def deltaEnergy(kinetic, potential):
 
 class Metropolis:
 	# Metropolis algorithm
-	def __init__(self, energy, deltaEnergy, init=None, initValWidth=1, valWidth=1, periodic=True, N=100, hbar=1, tau=0.1):
+	def __init__(self, deltaEnergy, init=None, initValWidth=1, valWidth=1, periodic=True, N=100, hbar=1, tau=0.1):
 		if init == None:
 			self.values = np.random.normal(size=N, scale=initValWidth)
 		elif type(init) in [float, int]:
@@ -75,7 +75,6 @@ class Metropolis:
 		if periodic:
 			self.values[-1] = self.values[0]
 
-		self.energy = energy
 		self.deltaEnergy = deltaEnergy
 		self.valWidth = valWidth
 		self.periodic = periodic
@@ -84,7 +83,6 @@ class Metropolis:
 		self.tau = tau
 
 	def __next__(self):
-		energy = self.energy(self.values)
 		start = 1 if self.periodic else 0
 		stop = self.N
 		accepted = 0
@@ -93,14 +91,12 @@ class Metropolis:
 			deltaEnergy = self.deltaEnergy(self.values, self.values[i], newvalue, i)
 			if deltaEnergy < 0:
 				self.values[i] = newvalue
-				energy = energy + deltaEnergy
 				accepted += 1
 				# accept it
 
 			else:
 				if np.exp(- self.tau * deltaEnergy / self.hbar) > np.random.rand():
 					self.values[i] = newvalue
-					energy = energy + deltaEnergy
 					accepted += 1
 					# accept it
 
