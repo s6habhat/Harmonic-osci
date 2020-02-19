@@ -59,7 +59,7 @@ def Energy(kinetic, potential):
 
 def deltaEnergy(kinetic, potential):
 	def wrapper(x, x_old, x_new, index, kinetic=kinetic, potential=potential):
-		return potential(x_new) - potential(x_old) + kinetic(x[index - 1], x_new) + kinetic(x_new, x[index + 1]) - (kinetic(x[index - 1], x_old) + kinetic(x_old, x[index + 1]))
+		return potential(x_new) - potential(x_old) + kinetic(x[index - 1], x_new) + kinetic(x_new, x[(index + 1) % len(x)]) - (kinetic(x[index - 1], x_old) + kinetic(x_old, x[(index + 1) % len(x)]))
 	return wrapper
 
 class Metropolis:
@@ -85,8 +85,8 @@ class Metropolis:
 
 	def __next__(self):
 		energy = self.energy(self.values)
-		start = 1
-		stop = self.N - 1
+		start = 1 if self.periodic else 0
+		stop = self.N
 		accepted = 0
 		for i in range(start, stop):
 			newvalue = np.random.normal(loc=self.values[i], scale=self.valWidth)
@@ -105,6 +105,8 @@ class Metropolis:
 					# accept it
 
 				# reject
+		if self.periodic:
+			self.values[0] = self.values[-1]
 		return self.values, accepted / (stop / start)
 
 	def __iter__(self):
