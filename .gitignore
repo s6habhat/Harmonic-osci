@@ -17,3 +17,6 @@ Report/report.pdf
 *.synctex.gz
 *.toc
 presentation/slides.pdf
+
+data/*
+imgs/*
