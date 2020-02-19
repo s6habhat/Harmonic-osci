@@ -89,7 +89,7 @@ class Metropolis:
 		stop = self.N - 1
 		accepted = 0
 		for i in range(start, stop):
-			newvalue = np.random.normal(self.valWidth)
+			newvalue = np.random.normal(loc=self.values[i], scale=self.valWidth)
 			deltaEnergy = self.deltaEnergy(self.values, self.values[i], newvalue, i)
 			if deltaEnergy < 0:
 				self.values[i] = newvalue
