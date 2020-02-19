@@ -20,6 +20,8 @@ $PYTHON src/create_plots_track.py data/harmonic_oscillator_track/N100i100init5.0
 $PYTHON src/create_plots_gauss.py data/harmonic_oscillator_track/N100i100init5.0000m0.2500.csv -i 1 10 20 40 80 100 -f
 $PYTHON src/create_plots_gauss.py data/harmonic_oscillator_track/N100i100init5.0000m0.2500.csv -i 10 20 40 80 100 -f
 
+echo
+
 # evolution of path from 5 to 0
 if [ ! -f data/harmonic_oscillator_track/N1000i100init5.0000m0.2500.csv ] || [ "${1}" = "-f" ]; then
     echo "Generating file data/harmonic_oscillator_track/N1000i100init5.0000m0.2500.csv"
@@ -30,6 +32,8 @@ fi
 $PYTHON src/create_plots_track.py data/harmonic_oscillator_track/N1000i100init5.0000m0.2500.csv -i 1 10 20 40 80 100
 $PYTHON src/create_plots_gauss.py data/harmonic_oscillator_track/N1000i100init5.0000m0.2500.csv -i 1 10 20 40 80 100 -f
 $PYTHON src/create_plots_gauss.py data/harmonic_oscillator_track/N1000i100init5.0000m0.2500.csv -i 10 20 40 80 100 -f
+
+echo
 
 # evolution of path from 5 to 0
 if [ ! -f data/harmonic_oscillator_track/N10000i100init5.0000m0.2500.csv ] || [ "${1}" = "-f" ]; then
@@ -42,6 +46,8 @@ $PYTHON src/create_plots_track.py data/harmonic_oscillator_track/N10000i100init5
 $PYTHON src/create_plots_gauss.py data/harmonic_oscillator_track/N10000i100init5.0000m0.2500.csv -i 1 10 20 40 80 100 -f
 $PYTHON src/create_plots_gauss.py data/harmonic_oscillator_track/N10000i100init5.0000m0.2500.csv -i 10 20 40 80 100 -f
 
+echo
+
 # evolution of path from 5 to 0 better
 if [ ! -f data/harmonic_oscillator_track/N1000i1000init5.0000m0.2500.csv ] || [ "${1}" = "-f" ]; then
     echo "Generating file data/harmonic_oscillator_track/N1000i1000init5.0000m0.2500.csv"
@@ -49,8 +55,8 @@ if [ ! -f data/harmonic_oscillator_track/N1000i1000init5.0000m0.2500.csv ] || [ 
 else
     echo "Not generating file data/harmonic_oscillator_track/N1000i1000init5.0000m0.2500.csv"
 fi
-echo 1
 $PYTHON src/create_plots_track.py data/harmonic_oscillator_track/N1000i1000init5.0000m0.2500.csv -i 1 10 20 40 80 100 1000
 $PYTHON src/create_plots_gauss.py data/harmonic_oscillator_track/N1000i1000init5.0000m0.2500.csv -i 1 10 20 40 80 100 1000 -f
 $PYTHON src/create_plots_gauss.py data/harmonic_oscillator_track/N1000i1000init5.0000m0.2500.csv -i 10 20 40 80 100 1000 -f
-echo 2
+
+echo
