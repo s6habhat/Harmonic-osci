@@ -44,7 +44,7 @@ for file in filenames:
 	plt.figure()
 	for iteration in iterations_used:
 		iteration = int(iteration)
-		plt.errorbar(data[iteration], numbers, label='path after %d iteration' %(iteration + 1))
+		plt.errorbar(data[iteration - 1], numbers, label='path after %d iteration%s' %(iteration, 's' if iteration > 1 else ''))
 		plt.xlabel('Position')
 		plt.ylabel('Number')
 	plt.legend()
