@@ -9,7 +9,7 @@ from glob import glob
 import itertools
 flatten = itertools.chain.from_iterable
 
-parser = argparse.ArgumentParser(description='Process some integers.')
+parser = argparse.ArgumentParser(description='Plot the path of a particle at different .')
 parser.add_argument("filenames", nargs='*')
 parser.add_argument('-i', "--iterations", nargs='+')
 args = parser.parse_args()
