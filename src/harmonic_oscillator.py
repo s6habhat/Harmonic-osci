@@ -34,10 +34,9 @@ p = Potential(mu, 0)	# harmonic potential -> no x^4 contribution
 
 k = Kinetic(mass, tau)
 
-e = Energy(k, p)
 de = deltaEnergy(k, p)
 
-m = Metropolis(e, de, init=initial, valWidth=1, hbar=hbar, tau=tau, N=N)
+m = Metropolis(de, init=initial, valWidth=1, hbar=hbar, tau=tau, N=N)
 
 root_path = getRootDirectory()
 dir_ = root_path / 'data' / 'harmonic_oscillator_track'
