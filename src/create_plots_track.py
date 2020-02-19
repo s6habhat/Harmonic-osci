@@ -27,7 +27,7 @@ for file in filenames:
 
 	relative_path = full_path.relative_to(root_path / 'data')
 
-	print("\nComputing file %s ..." %relative_path)
+	print("Computing file %s ... " %relative_path, end='')
 
 	data = {}
 
@@ -53,4 +53,5 @@ for file in filenames:
 	out_filename.parent.mkdir(exist_ok=True)
 
 	plt.savefig(out_filename.with_suffix(".png"))
-	plt.savefig(out_filename.with_suffix(".pdf"))
+	print('done')
+	#plt.savefig(out_filename.with_suffix(".pdf"))
