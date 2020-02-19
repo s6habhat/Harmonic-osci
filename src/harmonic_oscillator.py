@@ -43,7 +43,7 @@ root_path = getRootDirectory()
 dir_ = root_path / 'data' / 'harmonic_oscillator_track'
 dir_.mkdir(exist_ok=True)
 
-file_ = dir_ / ('N%di%dinit%0.4f.csv' % (N, iterations, initial))
+file_ = dir_ / ('N%di%dinit%0.4fm%0.4f.csv' % (N, iterations, initial, mass))
 
 accept_ratios = []
 with file_.open('w', newline='') as file:
