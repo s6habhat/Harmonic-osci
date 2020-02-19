@@ -1,35 +1,59 @@
-from tools import Potential, Action, Metropolis, getRootDirectory, distanceToParameter
-from matplotlib import pyplot as plt
+from tools import Potential, Energy, deltaEnergy, Kinetic, Metropolis, getRootDirectory, distanceToParameter
+import numpy as np
 import csv
+import argparse
 
-# number of lattice positions
-N = 1000
+parser = argparse.ArgumentParser(description='Create samples for the harmonic oscillator')
+parser.add_argument("-i", "--iterations", type=int, default=100,
+                    help="Number of Metropolis iterations")
+parser.add_argument("-N", "--number", type=int, default=100,
+                    help="Number of lattice sites")
+parser.add_argument("-m", "--mass", type=float, default=0.01,
+                    help="Mass of the particle")
+parser.add_argument("-u", "--mu", type=float, default=10,
+                    help="Depth of the potential")
+parser.add_argument("-t", "--tau", type=float, default=0.1,
+                    help="Time step size")
+parser.add_argument("-hb", "--hbar", type=float, default=1,
+                    help="Value of the reduces Plancks constant")
+parser.add_argument("-init", "--initial", type=float, default=None,
+                    help="Initial values for the path")
+parser.add_argument("-d", "--distance", type=float, default=10,
+                    help="Distance of the minima")
+args = parser.parse_args()
+
 
 # parameters
-mass = 0.01
-mu = -10
-distance = 10
+iterations = args.iterations
+N = args.number
+mass = args.mass
+mu = args.mu
+tau = args.tau
+hbar = args.hbar
+initial = args.initial
+distance = args.distance
 lambda_ = distanceToParameter(distance)
 
-tau = 0.1
-hbar = 1
+p = Potential(-mu, lambda_)
 
-p = Potential(mu, lambda_)
+k = Kinetic(mass, tau)
 
-a = Action(tau, mass, p)
+de = deltaEnergy(k, p)
 
-m = Metropolis(N, a, borders = [-10, 10], hbar=hbar, tau=tau, initval=-distance / 2)
-
-vals = list(m)
+m = Metropolis(de, init=initial, valWidth=1, hbar=hbar, tau=tau, N=N)
 
 root_path = getRootDirectory()
 dir_ = root_path / 'data' / 'anharmonic_oscillator_track'
 dir_.mkdir(exist_ok=True)
 
-file_ = dir_ / ('l%0.4fd%0.4fN%d.csv' % (lambda_, distance, N))
+file_ = dir_ / ('N%di%dinit%sm%0.4fl%0.4fd%0.4f.csv' % (N, iterations, 'rand' if initial == None else str(initial), mass, lambda_, distance))
 
+accept_ratios = []
 with file_.open('w', newline='') as file:
 	writer = csv.writer(file)
-	writer.writerow(['num', 'position'])
-	for i, position in enumerate(vals):
-		writer.writerow([i+1, position])
+	writer.writerow(['num'] + [str(i) for i in range(N)])
+	for iteration in range(iterations):
+		data, accept_ratio = next(m)
+		accept_ratios.append(accept_ratio)
+		writer.writerow([iteration] + list(data))
+print(np.mean(accept_ratios))
