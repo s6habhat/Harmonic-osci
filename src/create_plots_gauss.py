@@ -77,7 +77,7 @@ for file in filenames:
 	plt.legend()
 
 	out_filename = root_path / 'imgs' / relative_path
-	out_filename.parent.mkdir(exist_ok=True)
+	out_filename.parent.mkdir(parents=True, exist_ok=True)
 
 	out_filename = out_filename.with_suffix('')
 	out_filename = '%s_gauss_%s' %(out_filename, '-'.join([str(i) for i in iterations_used]))

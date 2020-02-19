@@ -40,7 +40,7 @@ m = Metropolis(de, init=initial, valWidth=1, hbar=hbar, tau=tau, N=N)
 
 root_path = getRootDirectory()
 dir_ = root_path / 'data' / 'harmonic_oscillator_track'
-dir_.mkdir(exist_ok=True)
+dir_.mkdir(parents=True, exist_ok=True)
 
 file_ = dir_ / ('N%di%dinit%0.4fm%0.4f.csv' % (N, iterations, initial, mass))
 

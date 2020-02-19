@@ -50,7 +50,7 @@ for file in filenames:
 	plt.legend()
 
 	out_filename = root_path / 'imgs' / relative_path
-	out_filename.parent.mkdir(exist_ok=True)
+	out_filename.parent.mkdir(parents=True, exist_ok=True)
 
 	plt.savefig(out_filename.with_suffix(".png"))
 	print('done')
