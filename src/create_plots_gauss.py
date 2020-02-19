@@ -33,7 +33,7 @@ for file in filenames:
 
 	relative_path = full_path.relative_to(root_path / 'data')
 
-	print('Computing file %s ... ' %relative_path, end='')
+	print('[Gauss] Computing file %s ... ' %relative_path, end='')
 
 	data = {}
 
