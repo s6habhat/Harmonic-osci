@@ -1,5 +1,6 @@
 from matplotlib import pyplot as plt
-from tools import getRootDirectory
+import matplotlib
+from tools import getRootDirectory, getColorIterator
 import csv
 import numpy as np
 import scipy.optimize as op
@@ -9,6 +10,8 @@ from glob import glob
 
 import itertools
 flatten = itertools.chain.from_iterable
+
+color_iterator = getColorIterator()
 
 def gauss(x, *p):
 	A, mu, sigma = p
@@ -58,9 +61,10 @@ for file in filenames:
 
 	bins = np.linspace(min_, max_, 100)	# 100 bins
 	for iteration in iterations_used:
+		color_plot, color_fit = next(color_iterator)['color']
 		hits = np.histogram(data[iteration - 1], bins)[0]
 		bins_mid = (bins[1:] + bins[:-1]) / 2
-		plt.errorbar(bins_mid, hits, label='path after %d iteration%s' %(iteration, 's' if iteration > 1 else ''), fmt='.')
+		plt.errorbar(bins_mid, hits, label='path after %d iteration%s' %(iteration, 's' if iteration > 1 else ''), fmt='.', color=color_plot)
 
 		if args.fit:
 			try:
@@ -68,7 +72,7 @@ for file in filenames:
 				parameters_error = np.sqrt(np.diag(parameters_error))
 				xdata_fit = np.linspace(min(bins), max(bins), 1000)
 				ydata_fit = gauss(xdata_fit, *parameters)
-				plt.plot(xdata_fit, ydata_fit)
+				plt.plot(xdata_fit, ydata_fit, color=color_fit)
 			except:
 				pass
 
