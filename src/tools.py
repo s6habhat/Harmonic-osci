@@ -1,7 +1,7 @@
 import numpy as np
 from pathlib import Path
 import os
-
+from cycler import cycler
 
 def getRootDirectory():
 	return Path(os.path.dirname(os.path.realpath(__file__))).parent
@@ -13,6 +13,17 @@ def getMinima(lambda_):
 def distanceToParameter(distance):
 	# calculate lambda parameter from distance
 	return -1/2 * (distance / 2)**-2
+
+colors_raw = ['1f77b4', 'ff7f0e', '2ca02c', 'd62728', '9467bd', '8c564b', 'e377c2', '7f7f7f', 'bcbd22', '17becf']
+
+def getColorIterator():
+	def make_lighter(color):
+		r, g, b = (int(color[i:i+2], base=16) for i in [0, 2, 4])
+		r, g, b = (r + 255) // 2, (g + 255) // 2, (b + 255) // 2
+		return '#%02X%02X%02X' %(r, g, b)
+
+	colors = [('#'+color, make_lighter(color)) for color in colors_raw]
+	return iter(cycler('color', colors))
 
 def bootstrap(num, values, func=np.mean):
 	# bootstrap function
