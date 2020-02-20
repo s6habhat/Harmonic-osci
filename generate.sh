@@ -57,6 +57,12 @@ fi
 $PYTHON src/create_plots_track.py data/harmonic_oscillator_track/N10000i100init5.0000m0.2500.csv -i 1 10 20 40 80 100
 $PYTHON src/create_plots_gauss.py data/harmonic_oscillator_track/N10000i100init5.0000m0.2500.csv -i 1 10 20 40 80 100 -f
 $PYTHON src/create_plots_gauss.py data/harmonic_oscillator_track/N10000i100init5.0000m0.2500.csv -i 10 20 40 80 100 -f
+$PYTHON src/create_plots_gauss.py data/harmonic_oscillator_track/N10000i100init5.0000m0.2500.csv -i 1 -f
+$PYTHON src/create_plots_gauss.py data/harmonic_oscillator_track/N10000i100init5.0000m0.2500.csv -i 10 -f
+$PYTHON src/create_plots_gauss.py data/harmonic_oscillator_track/N10000i100init5.0000m0.2500.csv -i 20 -f
+$PYTHON src/create_plots_gauss.py data/harmonic_oscillator_track/N10000i100init5.0000m0.2500.csv -i 40 -f
+$PYTHON src/create_plots_gauss.py data/harmonic_oscillator_track/N10000i100init5.0000m0.2500.csv -i 80 -f
+$PYTHON src/create_plots_gauss.py data/harmonic_oscillator_track/N10000i100init5.0000m0.2500.csv -i 100 -f
 
 echo
 
