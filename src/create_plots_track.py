@@ -52,6 +52,9 @@ for file in filenames:
 	out_filename = root_path / 'imgs' / relative_path
 	out_filename.parent.mkdir(parents=True, exist_ok=True)
 
-	plt.savefig(out_filename.with_suffix(".png"))
+	out_filename = out_filename.with_suffix('')
+	out_filename = '%s_track_%s' %(out_filename, '-'.join([str(i) for i in iterations_used]))
+
+	plt.savefig(out_filename + '.png')
 	print('done')
 	#plt.savefig(out_filename.with_suffix(".pdf"))
