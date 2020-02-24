@@ -14,6 +14,16 @@ def distanceToParameter(distance):
 	# calculate lambda parameter from distance
 	return -1/2 * (distance / 2)**-2
 
+def autoCorrelation(data, xdata):
+	mean = np.mean(data)
+	d = np.concatenate((data, data))
+	l = len(data)
+	return [np.mean((data - mean) * (d[i:i + l] - mean)) for i in list(xdata)]
+
+def autoCorrelationNormalized(data, xdata):
+	correlation = autoCorrelation(data, xdata)
+	return correlation / correlation[0]
+
 colors_raw = ['1f77b4', 'ff7f0e', '2ca02c', 'd62728', '9467bd', '8c564b', 'e377c2', '7f7f7f', 'bcbd22', '17becf']
 
 def getColorIterator():
