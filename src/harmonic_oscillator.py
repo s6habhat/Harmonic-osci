@@ -20,6 +20,8 @@ parser.add_argument("-init", "--initial", type=float, default=0,
                     help="Initial values for the path")
 parser.add_argument("-ir", "--initial-random", type=float, default=0,
                     help="Use random distribution around initial value")
+parser.add_argument("-s", "--step", action='store_true',
+                    help="Use a step function as initial state")
 args = parser.parse_args()
 
 
@@ -32,6 +34,7 @@ tau = args.tau
 hbar = args.hbar
 initial = args.initial
 initial_random = args.initial_random
+step = args.step
 
 p = Potential(mu, 0)	# harmonic potential -> no x^4 contribution
 
@@ -39,13 +42,16 @@ k = Kinetic(mass, tau)
 
 de = deltaEnergy(k, p)
 
+if step:
+	initial = [0.0] * int(N * 0.4) + [5.0] * int(N * 0.2) + [0.0] * int(N * 0.4)
+
 m = Metropolis(de, init=initial, valWidth=1, initValWidth=initial_random, hbar=hbar, tau=tau, N=N)
 
 root_path = getRootDirectory()
 dir_ = root_path / 'data' / 'harmonic_oscillator_track'
 dir_.mkdir(parents=True, exist_ok=True)
 
-file_ = dir_ / ('N%di%dinit%0.4fm%0.4f.csv' % (N, iterations, initial, mass))
+file_ = dir_ / ('N%di%dinit%sm%0.4f%s.csv' % (N, iterations, ('step' if type(initial) != float else '%0.4f' %initial), mass, ('step' if step else '')))
 
 accept_ratios = []
 with file_.open('w', newline='') as file:
