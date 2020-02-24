@@ -81,6 +81,21 @@ $PYTHON src/create_plots_gauss.py data/harmonic_oscillator_track/N1000i1000init5
 
 echo
 
+# evolution of a step state
+if [ ! -f data/harmonic_oscillator_track/N100i100initstepm0.2500step.csv ] || [ "${1}" = "-f" ] || [ "${1}" = "--force" ]; then
+    echo "Generating file data/harmonic_oscillator_track/N100i100initstepm0.2500step.csv"
+    $PYTHON src/harmonic_oscillator.py -m 0.25 -i 100 -N 100 --step
+else
+    echo "Not generating file data/harmonic_oscillator_track/N100i100initstepm0.2500step.csv"
+fi
+$PYTHON src/create_plots_track.py data/harmonic_oscillator_track/N100i100initstepm0.2500step.csv -i 1 10 20 40 80 100
+$PYTHON src/create_plots_track_shifted.py data/harmonic_oscillator_track/N100i100initstepm0.2500step.csv -i 1 10 20 40 80 100
+$PYTHON src/create_plots_track_shifted.py data/harmonic_oscillator_track/N100i100initstepm0.2500step.csv -i 1 5 10 15 20 25
+$PYTHON src/create_plots_track_shifted.py data/harmonic_oscillator_track/N100i100initstepm0.2500step.csv -i 1 2 3 4 5 6 7 8 9 10
+$PYTHON src/create_plots_track_shifted.py data/harmonic_oscillator_track/N100i100initstepm0.2500step.csv -i 1 3 5 7 9 11 13 15
+
+echo
+
 
 # anharmonic oscillator
 
