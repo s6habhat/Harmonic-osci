@@ -85,11 +85,9 @@ def deltaEnergy(kinetic, potential):
 
 class Metropolis:
 	# Metropolis algorithm
-	def __init__(self, deltaEnergy, init=None, initValWidth=1, valWidth=1, periodic=True, N=100, hbar=1, tau=0.1):
-		if init == None:
-			self.values = np.random.normal(size=N, scale=initValWidth)
-		elif type(init) in [float, int]:
-			self.values = np.full(N, float(init))
+	def __init__(self, deltaEnergy, init=0, initValWidth=1, valWidth=1, periodic=True, N=100, hbar=1, tau=0.1):
+		if type(init) in [float, int]:
+			self.values = np.random.normal(size=N, loc=init, scale=initValWidth)
 		else:
 			self.values = np.array(init)
 			N = len(self.values)
