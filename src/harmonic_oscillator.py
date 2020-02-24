@@ -18,6 +18,8 @@ parser.add_argument("-hb", "--hbar", type=float, default=1,
                     help="Value of the reduces Plancks constant")
 parser.add_argument("-init", "--initial", type=float, default=0,
                     help="Initial values for the path")
+parser.add_argument("-ir", "--initial-random", type=float, default=0,
+                    help="Use random distribution around initial value")
 args = parser.parse_args()
 
 
@@ -29,6 +31,7 @@ mu = args.mu
 tau = args.tau
 hbar = args.hbar
 initial = args.initial
+initial_random = args.initial_random
 
 p = Potential(mu, 0)	# harmonic potential -> no x^4 contribution
 
@@ -36,7 +39,7 @@ k = Kinetic(mass, tau)
 
 de = deltaEnergy(k, p)
 
-m = Metropolis(de, init=initial, valWidth=1, hbar=hbar, tau=tau, N=N)
+m = Metropolis(de, init=initial, valWidth=1, initValWidth=initial_random, hbar=hbar, tau=tau, N=N)
 
 root_path = getRootDirectory()
 dir_ = root_path / 'data' / 'harmonic_oscillator_track'

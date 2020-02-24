@@ -16,8 +16,10 @@ parser.add_argument("-t", "--tau", type=float, default=0.1,
                     help="Time step size")
 parser.add_argument("-hb", "--hbar", type=float, default=1,
                     help="Value of the reduces Plancks constant")
-parser.add_argument("-init", "--initial", type=float, default=None,
+parser.add_argument("-init", "--initial", type=float, default=0,
                     help="Initial values for the path")
+parser.add_argument("-ir", "--initial-random", type=float, default=0,
+                    help="Use random distribution around initial value")
 parser.add_argument("-d", "--distance", type=float, default=10,
                     help="Distance of the minima")
 args = parser.parse_args()
@@ -32,7 +34,9 @@ tau = args.tau
 hbar = args.hbar
 initial = args.initial
 distance = args.distance
+initial_random = args.initial_random
 lambda_ = distanceToParameter(distance)
+
 
 p = Potential(-mu, lambda_)
 
@@ -40,7 +44,7 @@ k = Kinetic(mass, tau)
 
 de = deltaEnergy(k, p)
 
-m = Metropolis(de, init=initial, valWidth=1, hbar=hbar, tau=tau, N=N)
+m = Metropolis(de, init=initial, valWidth=1, initValWidth=initial_random, hbar=hbar, tau=tau, N=N)
 
 root_path = getRootDirectory()
 dir_ = root_path / 'data' / 'anharmonic_oscillator_track'
