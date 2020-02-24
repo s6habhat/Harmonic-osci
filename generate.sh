@@ -84,7 +84,7 @@ echo
 
 # anharmonic oscillator
 
-if [ ! -f data/anharmonic_oscillator_track/N100i1000init5.0m0.2500l-0.0200d10.0000.csv ] || [ "${1}" = "-f" ] || [ "${1}" = "--force" ]; then
+if [ ! -f data/anharmonic_oscillator_track/N100i1000init0.0m0.2500l-0.0200d10.0000.csv ] || [ "${1}" = "-f" ] || [ "${1}" = "--force" ]; then
     echo "Generating file data/anharmonic_oscillator_track/N100i1000init0.0m0.2500l-0.0200d10.0000.csv"
     $PYTHON src/anharmonic_oscillator.py -m 0.25 -init 0 -ir 10 -i 1000 -N 100
 else
@@ -95,7 +95,7 @@ $PYTHON src/create_plots_track.py data/anharmonic_oscillator_track/N100i1000init
 
 echo
 
-if [ ! -f data/anharmonic_oscillator_track/N1000i1000init5.0m0.2500l-0.0200d10.0000.csv ] || [ "${1}" = "-f" ] || [ "${1}" = "--force" ]; then
+if [ ! -f data/anharmonic_oscillator_track/N1000i1000init0.0m0.2500l-0.0200d10.0000.csv ] || [ "${1}" = "-f" ] || [ "${1}" = "--force" ]; then
     echo "Generating file data/anharmonic_oscillator_track/N1000i1000init0.0m0.2500l-0.0200d10.0000.csv"
     $PYTHON src/anharmonic_oscillator.py -m 0.25 -init 0 -ir 10 -i 1000 -N 1000
 else
@@ -105,7 +105,7 @@ $PYTHON src/create_plots_track.py data/anharmonic_oscillator_track/N1000i1000ini
 
 echo
 
-if [ ! -f data/anharmonic_oscillator_track/N200i1000init5.0m0.2500l-0.0200d10.0000.csv ] || [ "${1}" = "-f" ] || [ "${1}" = "--force" ]; then
+if [ ! -f data/anharmonic_oscillator_track/N100i10000init0.0m0.2500l-0.0200d10.0000.csv ] || [ "${1}" = "-f" ] || [ "${1}" = "--force" ]; then
     echo "Generating file data/anharmonic_oscillator_track/N100i10000init0.0m0.2500l-0.0200d10.0000.csv"
     $PYTHON src/anharmonic_oscillator.py -m 0.25 -init 0 -ir 10 -i 10000 -N 100
 else
@@ -115,7 +115,7 @@ $PYTHON src/create_plots_track.py data/anharmonic_oscillator_track/N100i10000ini
 
 echo
 
-if [ ! -f data/anharmonic_oscillator_track/N200i1000init5.0m0.2500l-0.0200d10.0000.csv ] || [ "${1}" = "-f" ] || [ "${1}" = "--force" ]; then
+if [ ! -f data/anharmonic_oscillator_track/N200i10000init0.0m0.2500l-0.0200d10.0000.csv ] || [ "${1}" = "-f" ] || [ "${1}" = "--force" ]; then
     echo "Generating file data/anharmonic_oscillator_track/N200i10000init0.0m0.2500l-0.0200d10.0000.csv"
     $PYTHON src/anharmonic_oscillator.py -m 0.25 -init 0 -ir 10 -i 10000 -N 200
 else
