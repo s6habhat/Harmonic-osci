@@ -1,56 +1,76 @@
-from tools import Potential, Action, Metropolis, getRootDirectory
-import os
+from tools import Potential, Kinetic, deltaEnergy, Metropolis, getRootDirectory
 import numpy as np
 from multiprocessing import Pool
 from pathlib import Path
 import csv
+from itertools import islice
 
-# number of lattice positions
-N = 100000
+import argparse
+
+parser = argparse.ArgumentParser(description='Create samples for the harmonic oscillator, vary hbar')
+parser.add_argument("-i", "--iterations", type=int, default=100,
+                    help="Number of Metropolis iterations")
+parser.add_argument("-N", "--number", type=int, default=100,
+                    help="Number of lattice sites")
+parser.add_argument("-m", "--mass", type=float, default=0.01,
+                    help="Mass of the particle")
+parser.add_argument("-u", "--mu", type=float, default=10,
+                    help="Depth of the potential")
+parser.add_argument("-t", "--tau", type=float, default=0.1,
+                    help="Time step size")
+parser.add_argument("-hb", "--hbar", type=str, default='0:2:0.01',
+                    help="Values of the reduces Plancks constant")
+parser.add_argument("-b", "--bins", type=str, default='-5:5:0.1',
+                    help="Values of the reduces Plancks constant")
+parser.add_argument("-init", "--initial", type=float, default=0,
+                    help="Initial values for the path")
+parser.add_argument("-ir", "--initial-random", type=float, default=0,
+                    help="Use random distribution around initial value")
+parser.add_argument("-s", "--step", action='store_true',
+                    help="Use a step function as initial state")
+args = parser.parse_args()
+
 
 # parameters
-mass = 0.01
-mu = 10
-lambda_ = 0
+iterations = args.iterations
+N = args.number
+mass = args.mass
+mu = args.mu
+tau = args.tau
+hbar_min, hbar_max, hbar_step = (float(h) for h in args.hbar.split(':'))
+bins_min, bins_max, bins_step = (float(b) for b in args.bins.split(':'))
+initial = args.initial
+initial_random = args.initial_random
+step = args.step
 
-start, stop, step = -10, 10, 0.1
-
-tau = 0.1
-
-hbar_start, hbar_stop, hbar_step = 0.0, 2.0, 0.005
 
 root_path = getRootDirectory()
 dir_ = root_path / 'data' / 'harmonic_oscillator_classical_limit'
 dir_.mkdir(exist_ok=True)
-file_ = dir_ / ('h%0.2f-%0.2f-%0.4f_%0.2f-%0.2f-%0.2f-N%d.csv' % (hbar_start, hbar_stop, hbar_step, start, stop, step, N))
-if file_.exists():
-	i = input('Overwrite file "%s"? ' %file_.relative_to(root_path)).lower()
-	if i == 'y':
-		pass
-	else:
-		num = 1
-		while file_.exists():
-			file_ = dir_ / ('h%0.2f-%0.2f-%0.4f_%0.2f-%0.2f-%0.2f-N%d_%d.csv' % (hbar_start, hbar_stop, hbar_step, start, stop, step, N, num))
-			num += 1
+file_ = dir_ / ('h%0.2f-%0.2f-%0.4f_%0.2f-%0.2f-%0.2f-N%d.csv' % (hbar_min, hbar_max, hbar_step, bins_min, bins_max, bins_step, N))
 
-hbars = np.arange(hbar_start + hbar_step, hbar_stop + hbar_step, hbar_step)
-bins = np.arange(start, stop + step, step=step)
+hbars = np.arange(hbar_min + hbar_step, hbar_max + hbar_step, hbar_step)
+bins = np.arange(bins_min, bins_max + bins_step, bins_step)
 
 def calculatePositionDistribution(hbar):
-    print("calculating for hbar=%0.4f" % hbar)
-    p = Potential(mu, lambda_)
-    a = Action(tau, mass, p)
-    m = Metropolis(N, a, borders = [-10, 10], hbar=hbar, tau=tau, initval=0)
+	print("calculating for hbar=%0.4f" % hbar)
+	p = Potential(mu, 0)
 
-    vals = list(m)
-    return list(np.histogram(vals, bins)[0])
+	k = Kinetic(mass, tau)
+
+	de = deltaEnergy(k, p)
+
+	m = Metropolis(de, init=initial, valWidth=1, initValWidth=initial_random, hbar=hbar, tau=tau, N=N)
+
+	vals = next(islice(m, 100, 100 + 1))			# get 100th metropolis iteration
+	return list(np.histogram(vals[0], bins)[0])
 
 p = Pool()
 results = p.map(calculatePositionDistribution, hbars)
 
 with file_.open('w', newline='') as file:
-    writer = csv.writer(file)
-    writer.writerow(['hbar'] + list(bins[:-1]))
-    writer.writerow(['hbar'] + list(bins[1:]))
-    for i, hbar in enumerate(hbars):
-        writer.writerow([hbar] + results[i])
+	writer = csv.writer(file)
+	writer.writerow(['hbar'] + list(bins[:-1]))
+	writer.writerow(['hbar'] + list(bins[1:]))
+	for i, hbar in enumerate(hbars):
+		writer.writerow([hbar] + results[i])

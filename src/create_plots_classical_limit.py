@@ -41,8 +41,8 @@ for subdir_pattern in dirs:
 		cbar = fig.colorbar(cs)
 		cbar.ax.minorticks_off()
 
-		x0,x1 = ax.get_xlim()
-		y0,y1 = ax.get_ylim()
+		x0, x1 = ax.get_xlim()
+		y0, y1 = ax.get_ylim()
 		ax.set_aspect(abs(x1-x0)/abs(y1-y0))
 
 		plt.xlabel('position')
@@ -52,4 +52,3 @@ for subdir_pattern in dirs:
 		out_filename.parent.mkdir(parents=True, exist_ok=True)
 
 		plt.savefig(out_filename.with_suffix(".png"))
-		plt.savefig(out_filename.with_suffix(".pdf"))
