@@ -152,7 +152,6 @@ $PYTHON src/create_plots_classical_limit.py data/harmonic_oscillator_classical_l
 echo
 
 
-# classical limit harmonic oscillator
 if [ ! -f data/harmonic_oscillator_classical_limit/h0.00-2.00-0.0100_-3.00-3.00-0.05-N1000.csv ] || [ "${1}" = "-f" ] || [ "${1}" = "--force" ]; then
     echo "Generating file data/harmonic_oscillator_classical_limit/h0.00-2.00-0.0100_-3.00-3.00-0.05-N1000.csv"
     $PYTHON src/harmonic_oscillator_classical_limit.py -N 1000 -b " -3:3:0.05"
@@ -160,5 +159,16 @@ else
     echo "Not generating file data/harmonic_oscillator_classical_limit/h0.00-2.00-0.0100_-3.00-3.00-0.05-N1000.csv"
 fi
 $PYTHON src/create_plots_classical_limit.py data/harmonic_oscillator_classical_limit/h0.00-2.00-0.0100_-3.00-3.00-0.05-N1000.csv
+
+echo
+
+# classical limit anharmonic oscillator
+if [ ! -f data/anharmonic_oscillator_classical_limit/h0.00-2.00-0.0100_-10.00-10.00-0.10-N100.csv ] || [ "${1}" = "-f" ] || [ "${1}" = "--force" ]; then
+    echo "Generating file data/anharmonic_oscillator_classical_limit/h0.00-2.00-0.0100_-10.00-10.00-0.10-N100.csv"
+    $PYTHON src/anharmonic_oscillator_classical_limit.py -N 100 -b " -10:10:0.1" -init -5 -ir 2 -i 1000
+else
+    echo "Not generating file data/anharmonic_oscillator_classical_limit/h0.00-2.00-0.0100_-10.00-10.00-0.10-N100.csv"
+fi
+$PYTHON src/create_plots_classical_limit.py data/anharmonic_oscillator_classical_limit/h0.00-2.00-0.0100_-10.00-10.00-0.10-N100.csv
 
 echo
