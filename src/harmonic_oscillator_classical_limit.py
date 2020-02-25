@@ -62,7 +62,7 @@ def calculatePositionDistribution(hbar):
 
 	m = Metropolis(de, init=initial, valWidth=1, initValWidth=initial_random, hbar=hbar, tau=tau, N=N)
 
-	vals = next(islice(m, 100, 100 + 1))			# get 100th metropolis iteration
+	vals = next(islice(m, iterations, iterations + 1))			# get iterations th metropolis iteration
 	return list(np.histogram(vals[0], bins)[0])
 
 p = Pool()
