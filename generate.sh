@@ -174,12 +174,12 @@ $PYTHON src/create_plots_classical_limit.py data/anharmonic_oscillator_classical
 echo
 
 # lambda parameter anharmonic oscillator
-if [ ! -f data/anharmonic_oscillator_lambda_parameter/d0.00-10.00-0.10s-5.00-5.00-0.10-N100-i1000.csv ] || [ "${1}" = "-f" ] || [ "${1}" = "--force" ]; then
-    echo "Generating file data/anharmonic_oscillator_lambda_parameter/d0.00-10.00-0.10s-5.00-5.00-0.10-N100-i1000.csv"
+if [ ! -f data/anharmonic_oscillator_lambda_parameter/d0.00-10.00-0.10s-5.00-5.00-0.10-N1000-i100.csv ] || [ "${1}" = "-f" ] || [ "${1}" = "--force" ]; then
+    echo "Generating file data/anharmonic_oscillator_lambda_parameter/d0.00-10.00-0.10s-5.00-5.00-0.10-N1000-i100.csv"
     $PYTHON src/anharmonic_oscillator_lambda_parameter.py -init 0 -ir 10 -i 100 -N 1000
 else
-    echo "Not generating file data/anharmonic_oscillator_lambda_parameter/d0.00-10.00-0.10s-5.00-5.00-0.10-N100-i1000.csv"
+    echo "Not generating file data/anharmonic_oscillator_lambda_parameter/d0.00-10.00-0.10s-5.00-5.00-0.10-N1000-i100.csv"
 fi
-$PYTHON src/create_plots_lambda_parameter.py data/anharmonic_oscillator_lambda_parameter/d0.00-10.00-0.10s-5.00-5.00-0.10-N100-i1000.csv
+$PYTHON src/create_plots_lambda_parameter.py data/anharmonic_oscillator_lambda_parameter/d0.00-10.00-0.10s-5.00-5.00-0.10-N1000-i100.csv
 
 echo
