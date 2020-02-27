@@ -189,10 +189,22 @@ $PYTHON src/create_plots_classical_limit.py $FILE
 echo
 
 # classical limit anharmonic oscillator
-FILE=data/anharmonic_oscillator_classical_limit/h0.00-2.00-0.0100_-10.00-10.00-0.10-N100.csv
+FILE=data/anharmonic_oscillator_classical_limit/h0.00-2.00-0.0100_-4.00-4.00-0.05-N100d4.0000.csv
 if [ ! -f $FILE ] || [ "$force" = true ]; then
     echo "Generating file $FILE"
-    $PYTHON src/anharmonic_oscillator_classical_limit.py -N 100 -b " -10:10:0.1" -init -5 -ir 2 -i 1000
+    $PYTHON src/anharmonic_oscillator_classical_limit.py -N 100 -b " -4:4:0.05" -init -5 -ir 2 -i 1000 -d 4 -b " -5:5:0.05"
+else
+    echo "Not generating file $FILE"
+fi
+$PYTHON src/create_plots_classical_limit.py $FILE
+
+echo
+
+# classical limit anharmonic oscillator
+FILE=data/anharmonic_oscillator_classical_limit/h0.00-2.00-0.0100_-5.00-5.00-0.05-N1000d4.0000.csv
+if [ ! -f $FILE ] || [ "$force" = true ]; then
+    echo "Generating file $FILE"
+    $PYTHON src/anharmonic_oscillator_classical_limit.py -N 1000 -b " -5:5:0.05" -init -5 -ir 2 -i 1000 -d 4
 else
     echo "Not generating file $FILE"
 fi
