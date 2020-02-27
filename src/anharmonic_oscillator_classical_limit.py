@@ -5,6 +5,7 @@ from multiprocessing import Pool
 from pathlib import Path
 import csv
 from itertools import islice
+from configparser import ConfigParser
 
 import argparse
 
@@ -31,6 +32,8 @@ parser.add_argument("-s", "--step", action='store_true',
                     help="Use a step function as initial state")
 parser.add_argument("-d", "--distance", type=float, default=10,
                     help="Distance of the minima")
+parser.add_argument("-o", "--output", type=str, default='',
+                    help="Output filename")
 args = parser.parse_args()
 
 # parameters
@@ -46,12 +49,27 @@ initial_random = args.initial_random
 step = args.step
 distance = args.distance
 lambda_ = distanceToParameter(distance)
+output = args.output
+
+parameters = [
+			'iterations', 'N', 'mass', 'mu', 'tau', 'hbar_min', 'hbar_max', 'hbar_step',
+			'bins_min', 'bins_max', 'bins_step', 'initial', 'initial_random', 'step',
+			'distance', 'lambda_',
+			]
 
 root_path = getRootDirectory()
 dir_ = root_path / 'data' / 'anharmonic_oscillator_classical_limit'
 dir_.mkdir(exist_ok=True)
-file_ = dir_ / ('h%0.2f-%0.2f-%0.4f_%0.2f-%0.2f-%0.2f-N%d.csv' % (hbar_min, hbar_max, hbar_step, bins_min, bins_max, bins_step, N))
+file_ = dir_ / ('h%0.2f-%0.2f-%0.4f_%0.2f-%0.2f-%0.2f-N%dd%0.4f.csv' % (hbar_min, hbar_max, hbar_step, bins_min, bins_max, bins_step, N, distance))
+if output != '':
+	file_ = dir_ / output
+config_filename = file_.with_suffix('.cfg')
+config = ConfigParser()
+config['DEFAULT'] = {p: eval(p) for p in parameters}
+config['DEFAULT']['type'] = 'anharmonic_oscillator_classical_limit'
 
+with open(config_filename, 'w') as configfile:
+	config.write(configfile)
 
 hbars = np.arange(hbar_min + hbar_step, hbar_max + hbar_step, hbar_step)
 bins = np.arange(bins_min, bins_max + bins_step, bins_step)

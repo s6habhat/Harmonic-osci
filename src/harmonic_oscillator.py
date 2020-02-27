@@ -2,6 +2,7 @@ from tools import Potential, Energy, deltaEnergy, Kinetic, Metropolis, getRootDi
 import numpy as np
 import csv
 import argparse
+from configparser import ConfigParser
 
 parser = argparse.ArgumentParser(description='Create samples for the harmonic oscillator')
 parser.add_argument("-i", "--iterations", type=int, default=100,
@@ -22,6 +23,8 @@ parser.add_argument("-ir", "--initial-random", type=float, default=0,
                     help="Use random distribution around initial value")
 parser.add_argument("-s", "--step", action='store_true',
                     help="Use a step function as initial state")
+parser.add_argument("-o", "--output", type=str, default='',
+                    help="Output filename")
 args = parser.parse_args()
 
 
@@ -35,6 +38,12 @@ hbar = args.hbar
 initial = args.initial
 initial_random = args.initial_random
 step = args.step
+output = args.output
+
+parameters = [
+			'iterations', 'N', 'mass', 'mu', 'tau', 'hbar', 'initial', 'initial_random',
+            'step',
+			]
 
 p = Potential(mu, 0)	# harmonic potential -> no x^4 contribution
 
@@ -52,6 +61,16 @@ dir_ = root_path / 'data' / 'harmonic_oscillator_track'
 dir_.mkdir(parents=True, exist_ok=True)
 
 file_ = dir_ / ('N%di%dinit%sm%0.4f%s.csv' % (N, iterations, ('step' if type(initial) != float else '%0.4f' %initial), mass, ('step' if step else '')))
+
+if output != '':
+	file_ = dir_ / output
+config_filename = file_.with_suffix('.cfg')
+config = ConfigParser()
+config['DEFAULT'] = {p: eval(p) for p in parameters}
+config['DEFAULT']['type'] = 'harmonic_oscillator'
+
+with open(config_filename, 'w') as configfile:
+	config.write(configfile)
 
 accept_ratios = []
 with file_.open('w', newline='') as file:

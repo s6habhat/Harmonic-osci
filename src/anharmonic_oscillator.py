@@ -2,6 +2,7 @@ from tools import Potential, Energy, deltaEnergy, Kinetic, Metropolis, getRootDi
 import numpy as np
 import csv
 import argparse
+from configparser import ConfigParser
 
 parser = argparse.ArgumentParser(description='Create samples for the harmonic oscillator')
 parser.add_argument("-i", "--iterations", type=int, default=100,
@@ -22,6 +23,8 @@ parser.add_argument("-ir", "--initial-random", type=float, default=0,
                     help="Use random distribution around initial value")
 parser.add_argument("-d", "--distance", type=float, default=10,
                     help="Distance of the minima")
+parser.add_argument("-o", "--output", type=str, default='',
+                    help="Output filename")
 args = parser.parse_args()
 
 
@@ -33,10 +36,15 @@ mu = args.mu
 tau = args.tau
 hbar = args.hbar
 initial = args.initial
-distance = args.distance
 initial_random = args.initial_random
+distance = args.distance
 lambda_ = distanceToParameter(distance)
+output = args.output
 
+parameters = [
+			'iterations', 'N', 'mass', 'mu', 'tau', 'hbar', 'initial', 'initial_random',
+            'distance', 'lambda_',
+			]
 
 p = Potential(-mu, lambda_)
 
@@ -51,6 +59,16 @@ dir_ = root_path / 'data' / 'anharmonic_oscillator_track'
 dir_.mkdir(parents=True, exist_ok=True)
 
 file_ = dir_ / ('N%di%dinit%sm%0.4fl%0.4fd%0.4f.csv' % (N, iterations, 'rand' if initial == None else str(initial), mass, lambda_, distance))
+
+if output != '':
+	file_ = dir_ / output
+config_filename = file_.with_suffix('.cfg')
+config = ConfigParser()
+config['DEFAULT'] = {p: eval(p) for p in parameters}
+config['DEFAULT']['type'] = 'anharmonic_oscillator'
+
+with open(config_filename, 'w') as configfile:
+	config.write(configfile)
 
 accept_ratios = []
 with file_.open('w', newline='') as file:
