@@ -73,6 +73,12 @@ $PYTHON src/create_plots_gauss.py $FILE -i 20 -f
 $PYTHON src/create_plots_gauss.py $FILE -i 40 -f
 $PYTHON src/create_plots_gauss.py $FILE -i 80 -f
 $PYTHON src/create_plots_gauss.py $FILE -i 100 -f
+$PYTHON src/create_plots_qq.py $FILE -i 1
+$PYTHON src/create_plots_qq.py $FILE -i 10
+$PYTHON src/create_plots_qq.py $FILE -i 20
+$PYTHON src/create_plots_qq.py $FILE -i 40
+$PYTHON src/create_plots_qq.py $FILE -i 80
+$PYTHON src/create_plots_qq.py $FILE -i 100
 
 echo
 
@@ -103,6 +109,12 @@ $PYTHON src/create_plots_track_shifted.py $FILE -i 1 10 20 40 80 100
 $PYTHON src/create_plots_track_shifted.py $FILE -i 1 5 10 15 20 25
 $PYTHON src/create_plots_track_shifted.py $FILE -i 1 2 3 4 5 6 7 8 9 10
 $PYTHON src/create_plots_track_shifted.py $FILE -i 1 3 5 7 9 11 13 15
+$PYTHON src/create_plots_qq.py $FILE -i 1
+$PYTHON src/create_plots_qq.py $FILE -i 10
+$PYTHON src/create_plots_qq.py $FILE -i 20
+$PYTHON src/create_plots_qq.py $FILE -i 40
+$PYTHON src/create_plots_qq.py $FILE -i 80
+$PYTHON src/create_plots_qq.py $FILE -i 100
 
 echo
 
