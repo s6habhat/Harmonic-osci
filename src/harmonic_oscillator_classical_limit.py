@@ -64,9 +64,6 @@ config = ConfigParser()
 config['DEFAULT'] = {p: eval(p) for p in parameters}
 config['DEFAULT']['type'] = 'harmonic_oscillator_classical_limit'
 
-with open(config_filename, 'w') as configfile:
-	config.write(configfile)
-
 hbars = np.arange(hbar_min + hbar_step, hbar_max + hbar_step, hbar_step)
 bins = np.arange(bins_min, bins_max + bins_step, bins_step)
 
@@ -81,14 +78,20 @@ def calculatePositionDistribution(hbar):
 	m = Metropolis(de, init=initial, valWidth=1, initValWidth=initial_random, hbar=hbar, tau=tau, N=N)
 
 	vals = next(islice(m, iterations, iterations + 1))			# get iterations th metropolis iteration
-	return list(np.histogram(vals[0], bins)[0])
+	return list(np.histogram(vals[0], bins)[0]), vals[1]
 
 p = Pool()
 results = p.map(calculatePositionDistribution, hbars)
+accept_ratio = np.mean([r[1] for r in results])
 
 with file_.open('w', newline='') as file:
 	writer = csv.writer(file)
 	writer.writerow(['hbar'] + list(bins[:-1]))
 	writer.writerow(['hbar'] + list(bins[1:]))
 	for i, hbar in enumerate(hbars):
-		writer.writerow([hbar] + results[i])
+		writer.writerow([hbar] + results[i][0])
+
+config['DEFAULT']['accept_ratio'] = str(accept_ratio)
+
+with open(config_filename, 'w') as configfile:
+	config.write(configfile)

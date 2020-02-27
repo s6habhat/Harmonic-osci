@@ -69,9 +69,6 @@ config = ConfigParser()
 config['DEFAULT'] = {p: eval(p) for p in parameters}
 config['DEFAULT']['type'] = 'harmonic_oscillator'
 
-with open(config_filename, 'w') as configfile:
-	config.write(configfile)
-
 accept_ratios = []
 with file_.open('w', newline='') as file:
 	writer = csv.writer(file)
@@ -80,4 +77,9 @@ with file_.open('w', newline='') as file:
 		data, accept_ratio = next(m)
 		accept_ratios.append(accept_ratio)
 		writer.writerow([iteration] + list(data))
-print(np.mean(accept_ratios))
+accept_ratio = np.mean(accept_ratios)
+
+config['DEFAULT']['accept_ratio'] = str(accept_ratio)
+
+with open(config_filename, 'w') as configfile:
+	config.write(configfile)

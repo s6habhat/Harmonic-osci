@@ -68,9 +68,6 @@ config = ConfigParser()
 config['DEFAULT'] = {p: eval(p) for p in parameters}
 config['DEFAULT']['type'] = 'anharmonic_oscillator_lambda_parameter'
 
-with open(config_filename, 'w') as configfile:
-	config.write(configfile)
-
 distances = np.arange(distance_min + distance_step, distance_max + distance_step, distance_step)
 bins = np.arange(bins_min, bins_max + bins_step, bins_step)
 
@@ -86,14 +83,20 @@ def calculatePositionDistribution(distance):
 	m = Metropolis(de, init=initial, valWidth=1, initValWidth=initial_random, hbar=hbar, tau=tau, N=N)
 
 	vals = next(islice(m, iteration, iteration + 1))			# get iterations th metropolis iteration
-	return list(np.histogram(vals[0], bins)[0])
+	return list(np.histogram(vals[0], bins)[0]), vals[1]
 
 p = Pool()
 results = p.map(calculatePositionDistribution, distances)
+accept_ratio = np.mean([r[1] for r in results])
 
 with file_.open('w', newline='') as file:
 	writer = csv.writer(file)
 	writer.writerow(['distance'] + list(bins[:-1]))
 	writer.writerow(['distance'] + list(bins[1:]))
 	for i, distance in enumerate(distances):
-		writer.writerow([distance] + results[i])
+		writer.writerow([distance] + results[i][0])
+
+config['DEFAULT']['accept_ratio'] = str(accept_ratio)
+
+with open(config_filename, 'w') as configfile:
+	config.write(configfile)
